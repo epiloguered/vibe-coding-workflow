@@ -1,0 +1,4 @@
+interface:
+  display_name: "Vibe Coding Workflow"
+  short_description: "Create projects with a document-first workflow"
+  default_prompt: "Use $vibe-coding-workflow to create a new project from clarified requirements."

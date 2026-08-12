@@ -1,0 +1,41 @@
+name: Validate workflow
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          - macos-latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate repository structure
+        run: python tests/validate_repository.py
+
+      - name: Test Windows initializer
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./tests/test-init-project.ps1
+
+      - name: Test macOS initializer
+        if: runner.os == 'macOS'
+        shell: bash
+        run: bash tests/test-init-project.sh
